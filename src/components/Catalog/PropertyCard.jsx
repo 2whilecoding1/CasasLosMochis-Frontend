@@ -42,7 +42,7 @@ export default function PropertyCard({ property }) {
   }).format(price)
 
   return (
-    <Card className="overflow-hidden group hover:shadow-md transition-shadow duration-200">
+    <Card className="overflow-hidden group hover:shadow-lg hover:-translate-y-1 transition-all duration-200">
       {/* Imagen */}
       <div className="relative h-44 sm:h-48 lg:h-52 bg-silver-100 overflow-hidden">
         {mainImage ? (
