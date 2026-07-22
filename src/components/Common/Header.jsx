@@ -19,7 +19,7 @@ export default function Header() {
   const canManageUsers = isAuthenticated && (user?.is_staff || user?.role === 'admin')
   const links = [
     ...navLinks,
-    ...(canSeeLeads ? [{ label: 'Mis Leads', to: '/leads' }] : []),
+    ...(canSeeLeads ? [{ label: 'Mis Leads', to: '/leads' }, { label: 'Contratos', to: '/contracts' }] : []),
     ...(canManageUsers ? [{ label: 'Usuarios', to: '/admin/users' }] : []),
   ]
 

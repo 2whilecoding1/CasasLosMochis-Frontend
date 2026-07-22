@@ -20,6 +20,7 @@ import Privacy from './pages/Privacy'
 import Contact from './pages/Contact'
 import Leads from './pages/Leads'
 import LeadDetail from './pages/LeadDetail'
+import Contracts from './pages/Contracts'
 import useAuthStore from './stores/authStore'
 
 // Bloquea el resto de la app hasta que un usuario con cambio de contraseña
@@ -90,6 +91,14 @@ export default function App() {
               element={(
                 <AgentRoute>
                   <LeadDetail />
+                </AgentRoute>
+              )}
+            />
+            <Route
+              path="/contracts"
+              element={(
+                <AgentRoute>
+                  <Contracts />
                 </AgentRoute>
               )}
             />
