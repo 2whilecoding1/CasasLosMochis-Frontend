@@ -66,6 +66,55 @@ export const authService = {
     }
   },
 
+  // Login con Google (credential = ID token entregado por Google Identity Services)
+  loginWithGoogle: async (credential) => {
+    try {
+      const response = await api.post(`${AUTH_BASE}/users/google_login/`, { credential });
+      saveTokens(response.data.access, response.data.refresh);
+      if (response.data.user) saveUser(response.data.user);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Solicitar recuperación de contraseña (envía email con link)
+  requestPasswordReset: async (email) => {
+    try {
+      const response = await api.post(`${AUTH_BASE}/users/password_reset_request/`, { email });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Confirmar recuperación de contraseña con uid/token del link
+  confirmPasswordReset: async (uid, token, newPassword) => {
+    try {
+      const response = await api.post(`${AUTH_BASE}/users/password_reset_confirm/`, {
+        uid,
+        token,
+        new_password: newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Primer cambio de contraseña obligatorio (no pide la anterior)
+  setPassword: async (newPassword, newPasswordConfirm) => {
+    try {
+      const response = await api.post(`${AUTH_BASE}/users/set_password/`, {
+        new_password: newPassword,
+        new_password_confirm: newPasswordConfirm,
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   // Cambiar contraseña
   changePassword: async (oldPassword, newPassword, newPasswordConfirm) => {
     try {

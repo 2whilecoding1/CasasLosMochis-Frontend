@@ -2,6 +2,8 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import Button from '../components/Common/Button'
 import propertyService from '../services/propertyService'
+import { getFriendlyMessage } from '../utils/errorMessage'
+import { toast } from '../stores/toastStore'
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
@@ -63,17 +65,6 @@ function toNumberOrNull(value) {
   return Number.isNaN(num) ? null : num
 }
 
-function apiErrorToMessage(error) {
-  if (!error) return 'No se pudo publicar la propiedad.'
-  if (typeof error === 'string') return error
-  if (error.detail) return error.detail
-  const firstKey = Object.keys(error)[0]
-  if (!firstKey) return 'No se pudo publicar la propiedad.'
-  const value = error[firstKey]
-  if (Array.isArray(value)) return `${firstKey}: ${value[0]}`
-  return `${firstKey}: ${String(value)}`
-}
-
 // Centra el mapa cuando cambia `center` (solo hay una instancia de mapa)
 function MapCenterHandler({ center }) {
   const map = useMap()
@@ -100,7 +91,6 @@ export default function PublishProperty() {
   const [cpError, setCpError] = useState('')
   const [loadingMeta, setLoadingMeta] = useState(true)
   const [metaError, setMetaError] = useState('')
-  const [submitError, setSubmitError] = useState('')
   const [createdProperty, setCreatedProperty] = useState(null)
   const [selectedFiles, setSelectedFiles] = useState([])
   const [markerPos, setMarkerPos] = useState(null)
@@ -312,13 +302,14 @@ export default function PublishProperty() {
         try {
           await propertyService.uploadImages(created.id, selectedFiles.map((s) => s.file))
         } catch (err) {
-          console.error('Image upload failed', err)
+          toast.warning(getFriendlyMessage(err, 'La propiedad se publicó, pero no se pudieron subir las imágenes.'))
         }
       }
       setCreatedProperty(created)
       setSubmitted(true)
+      toast.success('Propiedad publicada correctamente.')
     } catch (error) {
-      setSubmitError(apiErrorToMessage(error))
+      toast.error(getFriendlyMessage(error, 'No se pudo publicar la propiedad.'))
     }
   }
 
@@ -378,9 +369,9 @@ export default function PublishProperty() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 lg:py-8">
         <form id="publish-form" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
 
-          {(metaError || submitError) && (
+          {metaError && (
             <div className="rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm px-4 py-3">
-              {metaError || submitError}
+              {metaError}
             </div>
           )}
 

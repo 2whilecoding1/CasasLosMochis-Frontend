@@ -4,6 +4,8 @@ import Card from '../components/Common/Card'
 import Button from '../components/Common/Button'
 import leadService from '../services/leadService'
 import useAuthStore from '../stores/authStore'
+import { getFriendlyMessage } from '../utils/errorMessage'
+import { toast } from '../stores/toastStore'
 
 const COLUMNS = [
   { key: 'new', label: 'Nuevo' },
@@ -73,19 +75,17 @@ export default function Leads() {
   const { user } = useAuthStore()
   const [leads, setLeads] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [busyId, setBusyId] = useState(null)
   const [search, setSearch] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
-    setError('')
     try {
       const payload = await leadService.getLeads()
       const items = Array.isArray(payload) ? payload : payload?.results || []
       setLeads(items)
-    } catch {
-      setError('No se pudieron cargar los leads.')
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'No se pudieron cargar los leads.'))
     } finally {
       setLoading(false)
     }
@@ -101,9 +101,10 @@ export default function Leads() {
     setLeads((curr) => curr.map((l) => (l.id === id ? { ...l, status } : l)))
     try {
       await leadService.patchLead(id, { status })
-    } catch {
+      toast.success('Estado actualizado.')
+    } catch (err) {
       setLeads(previous)
-      setError('No se pudo actualizar el estado del lead.')
+      toast.error(getFriendlyMessage(err, 'No se pudo actualizar el estado del lead.'))
     } finally {
       setBusyId(null)
     }
@@ -114,8 +115,9 @@ export default function Leads() {
     try {
       const updated = await leadService.assignToMe(id)
       setLeads((curr) => curr.map((l) => (l.id === id ? { ...l, agent_name: updated.agent_name } : l)))
-    } catch {
-      setError('No se pudo asignar el lead.')
+      toast.success('Lead asignado a ti.')
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'No se pudo asignar el lead.'))
     } finally {
       setBusyId(null)
     }
@@ -159,12 +161,6 @@ export default function Leads() {
             className="w-full sm:w-72 rounded-lg border border-silver-200 px-3 py-2 text-sm"
           />
         </div>
-
-        {error && (
-          <p className="mb-4 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 inline-block">
-            {error}
-          </p>
-        )}
 
         {loading ? (
           <div className="text-center py-20 text-silver-400">

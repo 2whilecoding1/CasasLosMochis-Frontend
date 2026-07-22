@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import Card from '../components/Common/Card'
 import Button from '../components/Common/Button'
 import leadService from '../services/leadService'
+import { getFriendlyMessage } from '../utils/errorMessage'
+import { toast } from '../stores/toastStore'
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Nuevo' },
@@ -19,7 +21,7 @@ export default function LeadDetail() {
   const [lead, setLead] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
+  const [loadError, setLoadError] = useState('')
   const [notes, setNotes] = useState('')
   const [status, setStatus] = useState('new')
 
@@ -33,7 +35,7 @@ export default function LeadDetail() {
         setStatus(data.status)
       })
       .catch(() => {
-        if (mounted) setError('No se pudo cargar este lead.')
+        if (mounted) setLoadError('No se pudo cargar este lead.')
       })
       .finally(() => {
         if (mounted) setLoading(false)
@@ -45,12 +47,12 @@ export default function LeadDetail() {
 
   const handleSave = async () => {
     setSaving(true)
-    setError('')
     try {
       const updated = await leadService.patchLead(id, { notes, status })
       setLead(updated)
-    } catch {
-      setError('No se pudieron guardar los cambios.')
+      toast.success('Cambios guardados.')
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'No se pudieron guardar los cambios.'))
     } finally {
       setSaving(false)
     }
@@ -61,8 +63,9 @@ export default function LeadDetail() {
     try {
       const updated = await leadService.qualifyLead(id)
       setLead(updated)
-    } catch {
-      setError('No se pudo calificar el lead.')
+      toast.success('Lead marcado como calificado.')
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'No se pudo calificar el lead.'))
     } finally {
       setSaving(false)
     }
@@ -76,10 +79,10 @@ export default function LeadDetail() {
     )
   }
 
-  if (error && !lead) {
+  if (loadError && !lead) {
     return (
       <div className="min-h-screen bg-silver-50 flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="text-silver-500 text-lg font-medium">{error}</p>
+        <p className="text-silver-500 text-lg font-medium">{loadError}</p>
         <Button as={Link} to="/leads" variant="primary">Volver a leads</Button>
       </div>
     )
@@ -115,12 +118,6 @@ export default function LeadDetail() {
             </Button>
           )}
         </div>
-
-        {error && (
-          <p className="mb-4 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 inline-block">
-            {error}
-          </p>
-        )}
 
         <Card className="p-4 sm:p-5 mb-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

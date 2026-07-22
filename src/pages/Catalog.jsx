@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import PropertyCard from '../components/Catalog/PropertyCard'
 import FilterPanel from '../components/Catalog/FilterPanel'
 import propertyService from '../services/propertyService'
+import { toast } from '../stores/toastStore'
 
 // Si la API no devuelve propiedades, no usamos datos mock — mostrar catálogo vacío.
 
@@ -50,7 +51,6 @@ export default function Catalog() {
   const [filters, setFilters] = useState(EMPTY_FILTERS)
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(true)
-  const [apiError, setApiError] = useState('')
 
   useEffect(() => {
     let mounted = true
@@ -62,16 +62,15 @@ export default function Catalog() {
         const items = Array.isArray(payload) ? payload : payload?.results || []
         if (mounted && items.length > 0) {
           setProperties(items.map(mapApiProperty))
-          setApiError('')
         } else if (mounted) {
           // No hay propiedades publicadas — dejamos el catálogo vacío
           setProperties([])
         }
       } catch {
         if (mounted) {
-          // En caso de error de API, dejamos el catálogo vacío y mostramos el error
+          // En caso de error de API, dejamos el catálogo vacío y avisamos
           setProperties([])
-          setApiError('No se pudo cargar la API.')
+          toast.error('No se pudo cargar el catálogo de propiedades.')
         }
       } finally {
         if (mounted) setLoading(false)
@@ -108,11 +107,6 @@ export default function Catalog() {
             text-2xl sm:text-3xl lg:text-4xl">
             Catálogo de Propiedades
           </h1>
-          {apiError && (
-            <p className="mt-1 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 inline-block">
-              {apiError}
-            </p>
-          )}
           <p className="text-silver-500 mt-1 text-sm sm:text-base">
             {filtered.length} {filtered.length === 1 ? 'propiedad encontrada' : 'propiedades encontradas'}
           </p>

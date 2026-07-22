@@ -2,18 +2,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../components/Common/Button';
+import GoogleSignInButton from '../components/Common/GoogleSignInButton';
 import useAuthStore from '../stores/authStore';
-
-function getMessage(error) {
-  if (!error) return '';
-  if (typeof error === 'string') return error;
-  if (error.detail) return error.detail;
-  const firstKey = Object.keys(error)[0];
-  if (!firstKey) return 'Error al iniciar sesion';
-  const value = error[firstKey];
-  if (Array.isArray(value)) return value[0];
-  return String(value);
-}
+import { getFriendlyMessage } from '../utils/errorMessage';
+import { toast } from '../stores/toastStore';
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +20,7 @@ export default function Login() {
     },
   });
 
-  const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore();
+  const { login, loginWithGoogle, isLoading, clearError, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     clearError();
@@ -43,8 +35,16 @@ export default function Login() {
   const onSubmit = async (data) => {
     try {
       await login(data.username, data.password);
-    } catch {
-      // El error se maneja desde el store.
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'Usuario o contraseña incorrectos.'));
+    }
+  };
+
+  const handleGoogleCredential = async (credential) => {
+    try {
+      await loginWithGoogle(credential);
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'No se pudo iniciar sesión con Google.'));
     }
   };
 
@@ -58,11 +58,13 @@ export default function Login() {
           Accede para publicar y administrar tus propiedades.
         </p>
 
-        {error && (
-          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 text-red-700 text-sm px-3 py-2">
-            {getMessage(error)}
-          </div>
-        )}
+        <GoogleSignInButton onCredential={handleGoogleCredential} disabled={isLoading} />
+
+        <div className="flex items-center gap-3 my-5">
+          <div className="flex-1 h-px bg-silver-200" />
+          <span className="text-xs text-silver-400">o con tu usuario</span>
+          <div className="flex-1 h-px bg-silver-200" />
+        </div>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
@@ -113,8 +115,14 @@ export default function Login() {
           </Button>
         </form>
 
+        <div className="text-center mt-4 text-sm">
+          <Link to="/forgot-password" className="text-gold-600 hover:text-gold-700 underline underline-offset-2">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
+
         <p className="text-xs text-silver-400 mt-4 text-center">
-          Si no tienes acceso, solicita un usuario al administrador.
+          Este es un sitio privado. Si no tienes acceso, solicita una cuenta a un administrador.
         </p>
 
         <div className="mt-5 text-center">

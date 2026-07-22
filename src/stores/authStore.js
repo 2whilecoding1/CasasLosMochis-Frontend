@@ -35,6 +35,26 @@ const useAuthStore = create((set) => ({
     }
   },
 
+  loginWithGoogle: async (credential) => {
+    set({ isLoading: true, error: null });
+    try {
+      const result = await authService.loginWithGoogle(credential);
+      set({ user: result.user ?? authService.getStoredUser(), isAuthenticated: true, isLoading: false });
+      return result;
+    } catch (error) {
+      set({ error, isLoading: false, isAuthenticated: false });
+      throw error;
+    }
+  },
+
+  // Vuelve a pedir /me (p.ej. despues de set_password, para que
+  // must_change_password se refresque en el store sin recargar la pagina).
+  refreshUser: async () => {
+    const user = await authService.getCurrentUser();
+    set({ user });
+    return user;
+  },
+
   logout: () => {
     authService.logout();
     set({ user: null, isAuthenticated: false, error: null });

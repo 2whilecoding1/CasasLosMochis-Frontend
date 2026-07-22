@@ -16,7 +16,12 @@ export default function Header() {
 
   const displayName = user?.first_name || user?.username || 'Mi cuenta'
   const canSeeLeads = isAuthenticated && (user?.is_staff || user?.role === 'agent' || user?.role === 'admin')
-  const links = canSeeLeads ? [...navLinks, { label: 'Mis Leads', to: '/leads' }] : navLinks
+  const canManageUsers = isAuthenticated && (user?.is_staff || user?.role === 'admin')
+  const links = [
+    ...navLinks,
+    ...(canSeeLeads ? [{ label: 'Mis Leads', to: '/leads' }] : []),
+    ...(canManageUsers ? [{ label: 'Usuarios', to: '/admin/users' }] : []),
+  ]
 
   return (
     <header className="sticky top-0 z-50 bg-[#1a1a1a] border-b border-gold-500/20 shadow-md">
