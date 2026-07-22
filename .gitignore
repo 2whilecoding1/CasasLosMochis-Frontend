@@ -1,0 +1,27 @@
+# Claude Code local tooling
+.claude/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.vite/
+
+# Environment
+.env
+.env.local
+
+# Graphify
+graphify-out/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
