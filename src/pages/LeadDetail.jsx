@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import Card from '../components/Common/Card'
 import Button from '../components/Common/Button'
 import leadService from '../services/leadService'
+import interactionService from '../services/interactionService'
 import { getFriendlyMessage } from '../utils/errorMessage'
 import { toast } from '../stores/toastStore'
 
@@ -24,6 +25,9 @@ export default function LeadDetail() {
   const [loadError, setLoadError] = useState('')
   const [notes, setNotes] = useState('')
   const [status, setStatus] = useState('new')
+  const [interactions, setInteractions] = useState([])
+  const [newNote, setNewNote] = useState('')
+  const [addingInteraction, setAddingInteraction] = useState(false)
 
   useEffect(() => {
     let mounted = true
@@ -44,6 +48,20 @@ export default function LeadDetail() {
       mounted = false
     }
   }, [id])
+
+  const loadInteractions = useCallback(async () => {
+    try {
+      const payload = await interactionService.getInteractions({ lead: id })
+      const items = Array.isArray(payload) ? payload : payload?.results || []
+      setInteractions(items)
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'No se pudo cargar el historial de interacciones.'))
+    }
+  }, [id])
+
+  useEffect(() => {
+    loadInteractions()
+  }, [loadInteractions])
 
   const handleSave = async () => {
     setSaving(true)
@@ -68,6 +86,26 @@ export default function LeadDetail() {
       toast.error(getFriendlyMessage(err, 'No se pudo calificar el lead.'))
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleAddInteraction = async () => {
+    if (!newNote.trim()) return
+    setAddingInteraction(true)
+    try {
+      await interactionService.createInteraction({
+        lead: id,
+        interaction_type: 'note',
+        title: 'Nota',
+        description: newNote.trim(),
+      })
+      setNewNote('')
+      toast.success('Interacción agregada.')
+      loadInteractions()
+    } catch (err) {
+      toast.error(getFriendlyMessage(err, 'No se pudo agregar la interacción.'))
+    } finally {
+      setAddingInteraction(false)
     }
   }
 
@@ -176,6 +214,37 @@ export default function LeadDetail() {
           <Button type="button" variant="primary" onClick={handleSave} disabled={saving} className="self-start">
             {saving ? 'Guardando...' : 'Guardar cambios'}
           </Button>
+        </Card>
+
+        <Card className="p-4 sm:p-5 mt-4">
+          <h2 className="font-semibold text-[#1a1a1a] mb-3">Historial de interacciones</h2>
+          <div className="flex gap-2 mb-4">
+            <input
+              type="text"
+              value={newNote}
+              onChange={(e) => setNewNote(e.target.value)}
+              placeholder="Agregar una nota rápida..."
+              className="flex-1 rounded-lg border border-silver-200 px-3 py-2 text-sm"
+            />
+            <Button type="button" size="sm" variant="outline" onClick={handleAddInteraction} disabled={addingInteraction}>
+              Agregar
+            </Button>
+          </div>
+          {interactions.length === 0 ? (
+            <p className="text-xs text-silver-400">Sin interacciones registradas todavía.</p>
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {interactions.map((item) => (
+                <li key={item.id} className="border-l-2 border-gold-300 pl-3">
+                  <p className="text-xs text-silver-400">
+                    {new Date(item.created_at).toLocaleString('es-MX')} · {item.agent_name || 'Sistema'}
+                  </p>
+                  <p className="text-sm font-medium text-[#1a1a1a]">{item.title}</p>
+                  <p className="text-sm text-silver-600">{item.description}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </Card>
       </div>
     </div>
