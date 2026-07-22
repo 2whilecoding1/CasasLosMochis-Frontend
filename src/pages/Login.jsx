@@ -11,7 +11,6 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -20,7 +19,7 @@ export default function Login() {
     },
   });
 
-  const { login, loginWithGoogle, isLoading, clearError, isAuthenticated } = useAuthStore();
+  const { login, loginWithGoogle, isLoading, clearError, isAuthenticated, user } = useAuthStore();
 
   useEffect(() => {
     clearError();
@@ -28,9 +27,11 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(from, { replace: true });
+      const isAgentOrAdmin = user?.is_staff || user?.role === 'agent' || user?.role === 'admin';
+      const target = location.state?.from?.pathname || (isAgentOrAdmin ? '/dashboard' : '/');
+      navigate(target, { replace: true });
     }
-  }, [isAuthenticated, navigate, from]);
+  }, [isAuthenticated, navigate, location.state, user]);
 
   const onSubmit = async (data) => {
     try {
