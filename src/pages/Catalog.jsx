@@ -103,7 +103,7 @@ export default function Catalog() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         {/* Encabezado */}
         <div className="mb-5 sm:mb-6">
-          <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a]
+          <h1 className="font-serif font-bold text-[#1a1a1a]
             text-2xl sm:text-3xl lg:text-4xl">
             Catálogo de Propiedades
           </h1>

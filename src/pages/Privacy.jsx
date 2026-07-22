@@ -3,7 +3,7 @@ export default function Privacy() {
     <div className="min-h-screen bg-silver-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 max-w-3xl">
 
-        <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-2xl sm:text-3xl mb-2">
+        <h1 className="font-serif font-bold text-[#1a1a1a] text-2xl sm:text-3xl mb-2">
           Política de Privacidad
         </h1>
         <p className="text-silver-400 text-sm mb-8">Última actualización: abril de 2026</p>

@@ -108,7 +108,7 @@ export default function PropertyCard({ property }) {
       <div className="p-3 sm:p-4 flex flex-col gap-2.5 sm:gap-3">
         {/* Precio */}
         <div>
-          <p className="text-xl sm:text-2xl font-bold text-[#1a1a1a] font-['Playfair_Display']">
+          <p className="text-xl sm:text-2xl font-bold text-[#1a1a1a] font-serif">
             {formattedPrice}
             {operation === 'rent' && (
               <span className="text-xs sm:text-sm font-normal text-silver-500">/mes</span>

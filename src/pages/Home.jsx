@@ -7,7 +7,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 text-center">
-        <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a]
+        <h1 className="font-serif font-bold text-[#1a1a1a]
           text-3xl sm:text-4xl md:text-5xl lg:text-6xl
           leading-tight mb-4 sm:mb-6">
           Encuentra tu hogar<br className="hidden sm:block" /> perfecto en{' '}
@@ -38,7 +38,7 @@ export default function Home() {
               { value: '2', label: 'Ciudades' },
             ].map(({ value, label }) => (
               <div key={label}>
-                <p className="font-['Playfair_Display'] font-bold text-gold-500
+                <p className="font-serif font-bold text-gold-500
                   text-3xl sm:text-4xl lg:text-5xl mb-1">
                   {value}
                 </p>
@@ -51,7 +51,7 @@ export default function Home() {
 
       {/* Tipos de propiedad */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <h2 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-center
+        <h2 className="font-serif font-bold text-[#1a1a1a] text-center
           text-2xl sm:text-3xl mb-8 sm:mb-10">
           ¿Qué estás buscando?
         </h2>

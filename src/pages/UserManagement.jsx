@@ -112,7 +112,7 @@ export default function UserManagement() {
   return (
     <div className="min-h-screen bg-silver-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-4xl">
-        <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-2xl sm:text-3xl mb-1">
+        <h1 className="font-serif font-bold text-[#1a1a1a] text-2xl sm:text-3xl mb-1">
           Usuarios
         </h1>
         <p className="text-silver-500 text-sm mb-6">
@@ -158,7 +158,7 @@ export default function UserManagement() {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Usuario</label>
+              <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Usuario <span className="text-red-500">*</span></label>
               <div className="flex gap-2">
                 <input
                   className="flex-1 px-3 py-2.5 rounded-lg border border-silver-200 text-sm"
@@ -173,7 +173,7 @@ export default function UserManagement() {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Correo</label>
+              <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Correo <span className="text-red-500">*</span></label>
               <input
                 type="email"
                 className="w-full px-3 py-2.5 rounded-lg border border-silver-200 text-sm"

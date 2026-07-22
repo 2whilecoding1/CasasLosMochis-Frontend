@@ -29,7 +29,7 @@ export default function ForgotPassword() {
   return (
     <div className="min-h-screen bg-silver-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md bg-white border border-silver-200 rounded-2xl shadow-sm p-6 sm:p-8">
-        <h1 className="font-['Playfair_Display'] font-bold text-2xl sm:text-3xl text-[#1a1a1a] mb-2">
+        <h1 className="font-serif font-bold text-2xl sm:text-3xl text-[#1a1a1a] mb-2">
           Recuperar contraseña
         </h1>
 
@@ -51,7 +51,7 @@ export default function ForgotPassword() {
 
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Correo</label>
+                <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Correo <span className="text-red-500">*</span></label>
                 <input
                   type="email"
                   className="w-full px-3 py-2.5 rounded-lg border border-silver-200 text-sm text-[#1a1a1a]

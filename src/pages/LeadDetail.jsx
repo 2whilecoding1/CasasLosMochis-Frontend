@@ -103,7 +103,7 @@ export default function LeadDetail() {
 
         <div className="flex items-start justify-between gap-3 mb-6">
           <div>
-            <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-2xl sm:text-3xl">
+            <h1 className="font-serif font-bold text-[#1a1a1a] text-2xl sm:text-3xl">
               {lead.first_name} {lead.last_name}
             </h1>
             <p className="text-silver-500 mt-1">{lead.email} · {lead.phone}</p>

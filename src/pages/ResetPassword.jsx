@@ -36,7 +36,7 @@ export default function ResetPassword() {
   return (
     <div className="min-h-screen bg-silver-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md bg-white border border-silver-200 rounded-2xl shadow-sm p-6 sm:p-8">
-        <h1 className="font-['Playfair_Display'] font-bold text-2xl sm:text-3xl text-[#1a1a1a] mb-2">
+        <h1 className="font-serif font-bold text-2xl sm:text-3xl text-[#1a1a1a] mb-2">
           Nueva contraseña
         </h1>
 
@@ -52,7 +52,7 @@ export default function ResetPassword() {
 
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Nueva contraseña</label>
+                <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Nueva contraseña <span className="text-red-500">*</span></label>
                 <PasswordInput
                   placeholder="Mínimo 8 caracteres"
                   {...register('password', {
@@ -64,7 +64,7 @@ export default function ResetPassword() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Confirmar contraseña</label>
+                <label className="block text-sm font-semibold text-[#1a1a1a] mb-1.5">Confirmar contraseña <span className="text-red-500">*</span></label>
                 <PasswordInput
                   placeholder="Repite tu contraseña"
                   {...register('passwordConfirm', {

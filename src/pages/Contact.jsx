@@ -3,7 +3,7 @@ export default function Contact() {
     <div className="min-h-screen bg-silver-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 max-w-3xl">
 
-        <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-2xl sm:text-3xl mb-2">
+        <h1 className="font-serif font-bold text-[#1a1a1a] text-2xl sm:text-3xl mb-2">
           Contacto
         </h1>
         <p className="text-silver-500 text-sm mb-8">
@@ -86,7 +86,7 @@ export default function Contact() {
 
         {/* CTA publicar */}
         <div className="mt-6 bg-[#1a1a1a] rounded-2xl p-6 sm:p-8 text-center">
-          <h2 className="font-['Playfair_Display'] font-bold text-white text-lg sm:text-xl mb-2">
+          <h2 className="font-serif font-bold text-white text-lg sm:text-xl mb-2">
             ¿Quieres publicar tu propiedad?
           </h2>
           <p className="text-silver-400 text-sm mb-4">

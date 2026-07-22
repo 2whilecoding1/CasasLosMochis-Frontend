@@ -34,11 +34,11 @@ function Section({ title, children }) {
   )
 }
 
-function Field({ label, error, children, hint }) {
+function Field({ label, error, children, hint, required = false }) {
   return (
     <div className="flex flex-col gap-1">
       <label className="text-[11px] font-medium uppercase tracking-wide text-silver-500">
-        {label}
+        {label} {required && <span className="text-red-500">*</span>}
       </label>
       {children}
       {error && <p className="text-[11px] text-red-500">{error}</p>}
@@ -325,7 +325,7 @@ export default function PublishProperty() {
               <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
             </svg>
           </div>
-          <h2 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-2xl mb-2">
+          <h2 className="font-serif font-bold text-[#1a1a1a] text-2xl mb-2">
             ¡Propiedad publicada!
           </h2>
           <p className="text-silver-500 text-sm mb-6">La publicación fue guardada correctamente.</p>
@@ -346,7 +346,7 @@ export default function PublishProperty() {
       <div className="bg-white/80 backdrop-blur-xl border-b border-silver-100 sticky top-0 z-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <div className="min-w-0">
-            <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-base leading-tight truncate">
+            <h1 className="font-serif font-bold text-[#1a1a1a] text-base leading-tight truncate">
               Publicar propiedad
             </h1>
             <p className="text-[11px] text-silver-400 hidden sm:block">
@@ -378,7 +378,7 @@ export default function PublishProperty() {
           {/* Información general */}
           <div className="bg-white rounded-2xl border border-silver-100 p-5 sm:p-6 flex flex-col gap-5">
             <Section title="Información general">
-              <Field label="Título de la publicación" error={errors.title?.message}>
+              <Field label="Título de la publicación" error={errors.title?.message} required>
                 <input
                   type="text"
                   placeholder="Ej. Casa amplia en zona norte con alberca"
@@ -395,7 +395,7 @@ export default function PublishProperty() {
                   </select>
                 </Field>
 
-                <Field label="Tipo de inmueble" error={errors.property_type?.message}>
+                <Field label="Tipo de inmueble" error={errors.property_type?.message} required>
                   <select
                     className={inputCls(errors.property_type)}
                     {...register('property_type', { required: 'Selecciona un tipo' })}
@@ -407,7 +407,7 @@ export default function PublishProperty() {
                   </select>
                 </Field>
 
-                <Field label="Precio" error={errors.price?.message}>
+                <Field label="Precio" error={errors.price?.message} required>
                   <input
                     type="text"
                     placeholder="1,500,000"
@@ -450,7 +450,7 @@ export default function PublishProperty() {
                   </div>
                 </Field>
 
-                <Field label="Ciudad" error={errors.city?.message}>
+                <Field label="Ciudad" error={errors.city?.message} required>
                   <input
                     type="text"
                     placeholder="Los Mochis"
@@ -460,7 +460,7 @@ export default function PublishProperty() {
                 </Field>
 
                 <div className="col-span-2">
-                  <Field label="Estado" error={errors.state?.message}>
+                  <Field label="Estado" error={errors.state?.message} required>
                     <input
                       type="text"
                       placeholder="Sinaloa"
@@ -491,7 +491,7 @@ export default function PublishProperty() {
                   )}
                 </Field>
 
-                <Field label="Calle y número" error={errors.address?.message}>
+                <Field label="Calle y número" error={errors.address?.message} required>
                   <input
                     type="text"
                     placeholder="Ej. Blvd. Jiquilpan 400"

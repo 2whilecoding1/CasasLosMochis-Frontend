@@ -5,6 +5,10 @@
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['Playfair Display', 'serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       colors: {
         gold: {
           50: "#fffbf0",

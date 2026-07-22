@@ -146,7 +146,7 @@ export default function PropertyDetail() {
 
             {/* Título y ubicación */}
             <div>
-              <h1 className="font-['Playfair_Display'] font-bold text-[#1a1a1a] text-2xl sm:text-3xl lg:text-4xl">
+              <h1 className="font-serif font-bold text-[#1a1a1a] text-2xl sm:text-3xl lg:text-4xl">
                 {property.title}
               </h1>
               <p className="text-silver-500 mt-1">
@@ -199,12 +199,12 @@ export default function PropertyDetail() {
             <Card className="p-5 sm:p-6 lg:sticky lg:top-6 flex flex-col gap-4">
               <div>
                 {salePrice && (
-                  <p className="text-2xl sm:text-3xl font-bold text-[#1a1a1a] font-['Playfair_Display']">
+                  <p className="text-2xl sm:text-3xl font-bold text-[#1a1a1a] font-serif">
                     {salePrice}
                   </p>
                 )}
                 {rentPrice && (
-                  <p className={`font-bold text-[#1a1a1a] font-['Playfair_Display'] ${salePrice ? 'text-lg mt-1' : 'text-2xl sm:text-3xl'}`}>
+                  <p className={`font-bold text-[#1a1a1a] font-serif ${salePrice ? 'text-lg mt-1' : 'text-2xl sm:text-3xl'}`}>
                     {rentPrice}
                     <span className="text-sm font-normal text-silver-500">/mes</span>
                   </p>
